@@ -8,8 +8,7 @@ public:
     virtual ~CApplication();
 
 private:
-    float   time;
-    float   mouse;            
+    float   time;            
     
     BHandle vertexConstantBuffer;    
     BHandle pixelConstantBuffer;     

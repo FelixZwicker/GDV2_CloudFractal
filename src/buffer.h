@@ -12,5 +12,5 @@ struct SPixelBuffer
 {
     float time;
     float resolution[2];
-    float mouse;
+    float padding;
 };

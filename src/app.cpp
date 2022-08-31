@@ -2,8 +2,7 @@
 #include <math.h>
 
 CApplication::CApplication()
-    : time(0.0f)
-    , mouse(0.0f)        
+    : time(0.0f)       
     , vertexConstantBuffer(nullptr)
     , pixelConstantBuffer(nullptr)
     , vertexShader(nullptr)
@@ -93,7 +92,6 @@ bool CApplication::InternOnFrame()
     PixelBuffer.time = time;
     PixelBuffer.resolution[0] = 800.0f;
     PixelBuffer.resolution[1] = 600.0f;
-    PixelBuffer.mouse = mouse;
 
     UploadConstantBuffer(&PixelBuffer, pixelConstantBuffer);
 

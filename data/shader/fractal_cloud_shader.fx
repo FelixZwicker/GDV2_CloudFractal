@@ -12,7 +12,6 @@ cbuffer PSBuffer : register(b0)
 
 #define TIME		PSConstant.x
 #define RESOLUTION	PSConstant.yz
-#define MOUSE       PSConstant.xy
 
 struct VSInput
 {
@@ -117,7 +116,7 @@ float3 Render(float3 ro, float3 rd)
         float ld = max(h - sdf, 0.0f);
         float w = (1. - acc) * ld;
         //cast shadow direction
-        accColor += w * rayCastShadow(p, normalize(float3(-0.9f, -0.1f, 0.0f)));
+        accColor += w * rayCastShadow(p, normalize(float3(0.0f, -0.1f, 0.0f)));
         acc += w;
 
         sdf = max(sdf, 0.03f);
@@ -163,8 +162,8 @@ float4 PSShader(PSInput _Input) : SV_Target
 #endif 
 
         // camera       
-        float theta = radians(360.0f) * (MOUSE.x / RESOLUTION.x - 0.5f);
-        float phi = radians(90.0f) * (MOUSE.y / RESOLUTION.y - 0.5f) - 1.0f;
+        float theta = radians(360.0f) * (RESOLUTION.x - 0.5f);
+        float phi = radians(90.0f) * (RESOLUTION.y - 0.5f) - 1.0f;
         float3 ro = 7. * float3(sin(phi) * cos(theta), cos(phi), sin(phi) * sin(theta));
         float3 ta = float3(0.0f,0.0f,0.0f);
         // camera-to-world transformation
