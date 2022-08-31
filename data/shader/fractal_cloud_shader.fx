@@ -10,18 +10,18 @@ cbuffer PSBuffer : register(b0)
 	float4 PSConstant;
 };
 
-#define TIME			PSConstant.x
-#define RESOLUTION	    PSConstant.yz
-#define MOUSE           PSConstant.xy
+#define TIME		PSConstant.x
+#define RESOLUTION	PSConstant.yz
+#define MOUSE       PSConstant.xy
 
 struct VSInput
 {
-	float3 m_Position : POSITION;
+	float3 position : POSITION;
 };
 
 struct PSInput
 {
-	float4 m_Position : SV_POSITION;
+	float4 position : SV_POSITION;
 };
 
 //Vertex Shader
@@ -29,7 +29,7 @@ PSInput VSShader(VSInput _Input)
 {
     PSInput Output = (PSInput) 0;
 
-    Output.m_Position = mul(float4(_Input.m_Position, 1.0f), ScreenMatrix);
+    Output.position = mul(float4(_Input.position, 1.0f), ScreenMatrix);
 
     return Output;
 }
@@ -43,7 +43,7 @@ float2x2 rot(float a)
 
 float cube(float3 p)
 {
-    float3 a = abs(p) - 1.;
+    float3 a = abs(p) - 1.0f;
     return max(a.x, max(a.y, a.z));
 }
 
@@ -53,7 +53,7 @@ static float2x2 mz = float2x2(0, 0, 0, 0);
 
 float fold(float3 p)
 {
-    float scale = 50.0;
+    float scale = 50.0f;
     p *= scale;
     int iter = 13;
     for (int i = 0; i < iter; i++)
@@ -71,56 +71,56 @@ float map(float3 p)
     return fold(p);
 }
 
-float rayCastShadow(in float3 ro, in float3 rd)
+float rayCastShadow(float3 ro, float3 rd)
 {
     float3 p = ro;
-    float acc = 0.0;
-    float dist = 0.0;
+    float acc = 0.0f;
+    float dist = 0.0f;
 
     for (int i = 0; i < 32; i++)
     {
-        if ((dist > 6.) || (acc > .75))
+        if ((dist > 6.0f) || (acc > 0.75f))
             break;
 
         float sdf = map(p);
 
-        const float h = .05;
-        float ld = max(h - sdf, 0.0);
-        float w = (1. - acc) * ld;
+        const float h = 0.05f;
+        float ld = max(h - sdf, 0.0f);
+        float w = (1.0f - acc) * ld;
 
         acc += w;
 
-        sdf = max(sdf, 0.05);
+        sdf = max(sdf, 0.05f);
         p += sdf * rd;
         dist += sdf;
     }
-    return max((0.75 - acc), 0.0) / 0.75 + 0.02;
+    return max((0.75f - acc), 0.0f) / 0.75f + 0.02f;
 }
 
-float3 Render(in float3 ro, in float3 rd)
+float3 Render(float3 ro, float3 rd)
 {
     float3 p = ro;
-    float acc = 0.;
+    float acc = 0.0f;
 
-    float3 accColor = float3(0.0, 0.0, 0.0);
+    float3 accColor = float3(0.0f, 0.0f, 0.0f);
 
-    float dist = 0.0;
+    float dist = 0.0f;
 
     for (int i = 0; i < 64; i++)
     {
-        if ((dist > 10.) || (acc > .95))
+        if ((dist > 10.0f) || (acc > 0.95f))
             break;
 
-        float sdf = map(p) * 0.80;
+        float sdf = map(p) * 0.80f;
 
-        const float h = .05;
-        float ld = max(h - sdf, 0.0);
+        const float h = 0.05f;
+        float ld = max(h - sdf, 0.0f);
         float w = (1. - acc) * ld;
         //cast shadow direction
-        accColor += w * rayCastShadow(p, normalize(float3(-0.9, -0.1, 0.0)));
+        accColor += w * rayCastShadow(p, normalize(float3(-0.9f, -0.1f, 0.0f)));
         acc += w;
 
-        sdf = max(sdf, 0.03);
+        sdf = max(sdf, 0.03f);
 
         p += sdf * rd;
         dist += sdf;
@@ -129,10 +129,10 @@ float3 Render(in float3 ro, in float3 rd)
     return accColor;
 }
 
-float3x3 setCamera(in float3 ro, in float3 ta)
+float3x3 setCamera(float3 ro, float3 ta)
 {
     float3 cw = normalize(ta - ro);
-    float3 up = float3(0, 1, 0);
+    float3 up = float3(0.0f, 1.0f, 0.0f);
     float3 cu = normalize(cross(cw, up));
     float3 cv = normalize(cross(cu, cw));
     return float3x3(cu, cv, cw);
@@ -141,36 +141,36 @@ float3x3 setCamera(in float3 ro, in float3 ta)
 //Pixel Shader
 float4 PSShader(PSInput _Input) : SV_Target
 {
-    mz = rot(TIME * 0.19);
-    mx = rot(TIME * 0.13);
-    my = rot(TIME * 0.11);
+    mz = rot(TIME * 0.19f);
+    mx = rot(TIME * 0.13f);
+    my = rot(TIME * 0.11f);
 
-    float3 tot = float3(0,0.213,0.255);
+    float3 tot = float3(0.0f,0.213f,0.255f);
 
 #if AA
     float2 rook[4];
-    rook[0] = float2(1. / 8., 3. / 8.);
-    rook[1] = float2(3. / 8., -1. / 8.);
-    rook[2] = float2(-1. / 8., -3. / 8.);
-    rook[3] = float2(-3. / 8., 1. / 8.);
+    rook[0] = float2(1.0f / 8.0f, 3.0f / 8.0f);
+    rook[1] = float2(3.0f / 8.0f, -1.0f / 8.0f);
+    rook[2] = float2(-1.0f / 8.0f, -3.0f / 8.0f);
+    rook[3] = float2(-3.0f / 8.0f, 1.0f / 8.0f);
     for (int n = 0; n < 4; ++n)
     {
         // pixel coordinates
         float2 o = rook[n];
-        float2 p = (-RESOLUTION.xy + 2.0 * (_Input.m_Position.xy + o)) / RESOLUTION.y;
+        float2 p = (-RESOLUTION.xy + 2.0f * (_Input.position.xy + o)) / RESOLUTION.y;
 #else 
-        float2 p = (-RESOLUTION.xy + 2.0 * _Input.m_Position.xy) / RESOLUTION.y;
+        float2 p = (-RESOLUTION.xy + 2.0f * _Input.position.xy) / RESOLUTION.y;
 #endif 
 
         // camera       
-        float theta = radians(360.) * (MOUSE.x / RESOLUTION.x - 0.5);
-        float phi = radians(90.) * (MOUSE.y / RESOLUTION.y - 0.5) - 1.;
+        float theta = radians(360.0f) * (MOUSE.x / RESOLUTION.x - 0.5f);
+        float phi = radians(90.0f) * (MOUSE.y / RESOLUTION.y - 0.5f) - 1.0f;
         float3 ro = 7. * float3(sin(phi) * cos(theta), cos(phi), sin(phi) * sin(theta));
-        float3 ta = float3(0.0,0.0,0.0);
+        float3 ta = float3(0.0f,0.0f,0.0f);
         // camera-to-world transformation
         float3x3 ca = setCamera(ro, ta);
 
-        float3 rd = mul(transpose(ca), normalize(float3(p, 1.5)));
+        float3 rd = mul(transpose(ca), normalize(float3(p, 1.5f)));
 
         float3 col = Render(ro, rd);
 
@@ -178,10 +178,10 @@ float4 PSShader(PSInput _Input) : SV_Target
 #if AA
     }
 
-    tot /= 4.;
+    tot /= 4.0f;
 #endif
 
 
-return float4(sqrt(tot), 1.0);
+return float4(sqrt(tot), 1.0f);
 }
 /* Source: https://www.shadertoy.com/view/NsySD3 */

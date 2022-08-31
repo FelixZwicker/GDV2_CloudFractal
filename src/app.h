@@ -9,8 +9,7 @@ public:
 
 private:
     float   time;
-    float   mouse;
-    float   fieldOfView;             
+    float   mouse;            
     
     BHandle vertexConstantBuffer;    
     BHandle pixelConstantBuffer;     

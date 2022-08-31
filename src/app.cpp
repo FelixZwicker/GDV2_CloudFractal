@@ -3,8 +3,7 @@
 
 CApplication::CApplication()
     : time(0.0f)
-    , mouse(0.0f)
-    , fieldOfView(60.0f)        
+    , mouse(0.0f)        
     , vertexConstantBuffer(nullptr)
     , pixelConstantBuffer(nullptr)
     , vertexShader(nullptr)
