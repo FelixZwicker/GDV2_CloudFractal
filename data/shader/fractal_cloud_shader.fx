@@ -116,7 +116,7 @@ float3 Render(float3 ro, float3 rd)
         float ld = max(h - sdf, 0.0f);
         float w = (1. - acc) * ld;
         //cast shadow direction
-        accColor += w * rayCastShadow(p, normalize(float3(0.0f, -0.1f, 0.0f)));
+        accColor += w * rayCastShadow(p, normalize(float3(0.0f, -0.1f, -0.2f)));
         acc += w;
 
         sdf = max(sdf, 0.03f);
