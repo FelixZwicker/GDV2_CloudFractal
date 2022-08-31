@@ -11,15 +11,16 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="app.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="material.cpp" />
-    <ClCompile Include="mesh.cpp" />
+    <ClCompile Include="..\..\src\app.cpp" />
+    <ClCompile Include="..\..\src\main.cpp" />
+    <ClCompile Include="..\..\src\material.cpp" />
+    <ClCompile Include="..\..\src\mesh.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="app.h" />
-    <ClInclude Include="material.h" />
-    <ClInclude Include="mesh.h" />
+    <ClInclude Include="..\..\src\app.h" />
+    <ClInclude Include="..\..\src\buffer.h" />
+    <ClInclude Include="..\..\src\material.h" />
+    <ClInclude Include="..\..\src\mesh.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{230EC6D4-CD39-4CED-BD1B-0069055FB04E}</ProjectGuid>
